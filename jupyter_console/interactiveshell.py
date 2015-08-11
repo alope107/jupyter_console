@@ -505,6 +505,15 @@ class ZMQTerminalInteractiveShell(TerminalInteractiveShell):
         # ask_exit callback.
 
         while not self.exit_now:
+            first = True
+            while True:
+                if not self.client.is_alive():
+                    time.sleep(.1)
+                    if first:
+                        print("No response from kernel; waiting extra time...")
+                        first = False
+                else:
+                    break
             if not self.client.is_alive():
                 # kernel died, prompt for action or exit
 
